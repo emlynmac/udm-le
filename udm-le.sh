@@ -18,6 +18,14 @@ deploy_cert() {
 		cp -f ${UDM_LE_PATH}/lego/certificates/${CERT_NAME}.key ${UBIOS_CERT_PATH}/unifi-core.key
 		chmod 644 ${UBIOS_CERT_PATH}/unifi-core.*
 		NEW_CERT="yes"
+
+		# Deploy certificate for the RADIUS server too if enabled
+		if [ "$ENABLE_RADIUS" == "yes" ]; then
+			# Radius certificate
+			cp -f ${UDM_LE_PATH}/lego/certificates/${CERT_NAME}.crt ${RADIUS_CERT_PATH}/server.pem
+			cp -f ${UDM_LE_PATH}/lego/certificates/${CERT_NAME}.key ${RADIUS_CERT_PATH}/server-key.pem
+			chmod 600 ${RADIUS_CERT_PATH}/server*
+		fi
 	else
 		echo 'No new certificate was found, exiting without restart'
 	fi
